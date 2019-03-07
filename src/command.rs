@@ -1,6 +1,6 @@
 use std::process;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Command {
     Exit,
 }

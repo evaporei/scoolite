@@ -1,7 +1,7 @@
 use std::error;
 use std::fmt;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ProcessError {
     message: String,
 }
