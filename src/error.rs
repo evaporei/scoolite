@@ -2,25 +2,25 @@ use std::error;
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ProcessError {
+pub struct Error {
     message: String,
 }
 
-impl ProcessError {
+impl Error {
     pub fn new(message: &str) -> Self {
-        ProcessError {
+        Error {
             message: message.to_string(),
         }
     }
 }
 
-impl fmt::Display for ProcessError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.message)
     }
 }
 
-impl error::Error for ProcessError {
+impl error::Error for Error {
     fn description(&self) -> &str {
         &self.message
     }
