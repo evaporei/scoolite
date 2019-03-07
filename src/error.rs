@@ -8,7 +8,9 @@ pub struct ProcessError {
 
 impl ProcessError {
     pub fn new(message: &str) -> Self {
-        ProcessError { message: message.to_string() }
+        ProcessError {
+            message: message.to_string(),
+        }
     }
 }
 

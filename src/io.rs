@@ -1,5 +1,5 @@
-use std::io::{self, Write};
 use std::error;
+use std::io::{self, Write};
 
 use super::{Command, ProcessError};
 
@@ -23,9 +23,12 @@ pub fn process_input(input: String) -> Result<Command, ProcessError> {
     match input.as_ref() {
         ".exit" => Ok(Command::Exit),
         _ => {
-            let message = format!("Error processing input, command '{}' does not exist nor is implemented", input);
+            let message = format!(
+                "Error processing input, command '{}' does not exist nor is implemented",
+                input
+            );
             Err(ProcessError::new(&message))
-        },
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 extern crate scoolite;
 
-use scoolite::{print_prompt, read_input, process_input, print_error};
+use scoolite::{print_error, print_prompt, process_input, read_input};
 
 fn main() {
     loop {
