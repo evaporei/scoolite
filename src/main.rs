@@ -65,7 +65,7 @@ fn process_input(input: String) -> Result<Command, ProcessError> {
     }
 }
 
-fn print_error<T: error::Error>(error: T) {
+fn print_error(error: &error::Error) {
     println!("{}", error.description());
 }
 
@@ -79,7 +79,7 @@ fn main() {
 
         match command_result {
             Ok(command) => command.execute(),
-            Err(error) => print_error(error),
+            Err(error) => print_error(&error),
         };
     }
 }
