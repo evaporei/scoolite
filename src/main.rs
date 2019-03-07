@@ -1,10 +1,10 @@
 extern crate scoolite;
 
 use scoolite::Command;
+use scoolite::ProcessError;
 
 use std::io::{self, Write};
 use std::error;
-use std::fmt;
 
 fn print_prompt() {
     print!("db > ");
@@ -18,29 +18,6 @@ fn read_input() -> String {
     io::stdin().read_line(&mut input).unwrap();
 
     input
-}
-
-#[derive(Debug, Clone)]
-struct ProcessError {
-    message: String,
-}
-
-impl ProcessError {
-    fn new(message: &str) -> Self {
-        ProcessError { message: message.to_string() }
-    }
-}
-
-impl fmt::Display for ProcessError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.message)
-    }
-}
-
-impl error::Error for ProcessError {
-    fn description(&self) -> &str {
-        &self.message
-    }
 }
 
 fn process_input(input: String) -> Result<Command, ProcessError> {
