@@ -1,7 +1,10 @@
+extern crate scoolite;
+
+use scoolite::Command;
+
 use std::io::{self, Write};
 use std::error;
 use std::fmt;
-use std::process;
 
 fn print_prompt() {
     print!("db > ");
@@ -15,19 +18,6 @@ fn read_input() -> String {
     io::stdin().read_line(&mut input).unwrap();
 
     input
-}
-
-#[derive(Debug)]
-enum Command {
-    Exit,
-}
-
-impl Command {
-    fn execute(&self) {
-        match *self {
-            Command::Exit => process::exit(0),
-        }
-    }
 }
 
 #[derive(Debug, Clone)]
