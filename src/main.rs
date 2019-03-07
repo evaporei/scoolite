@@ -1,40 +1,6 @@
 extern crate scoolite;
 
-use scoolite::Command;
-use scoolite::ProcessError;
-
-use std::io::{self, Write};
-use std::error;
-
-fn print_prompt() {
-    print!("db > ");
-}
-
-fn read_input() -> String {
-    io::stdout().flush().unwrap();
-
-    let mut input = String::new();
-
-    io::stdin().read_line(&mut input).unwrap();
-
-    input
-}
-
-fn process_input(input: String) -> Result<Command, ProcessError> {
-    let input = input.trim();
-
-    match input.as_ref() {
-        ".exit" => Ok(Command::Exit),
-        _ => {
-            let message = format!("Error processing input, command '{}' does not exist nor is implemented", input);
-            Err(ProcessError::new(&message))
-        },
-    }
-}
-
-fn print_error(error: &error::Error) {
-    println!("{}", error.description());
-}
+use scoolite::{print_prompt, read_input, process_input, print_error};
 
 fn main() {
     loop {
