@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["AsAny","This trait has the purpose of casting between trait objects and Sized structures/enums."]]});
