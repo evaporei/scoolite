@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Error","Main `Error` `struct`, it holds any `message` as `String`."]]});

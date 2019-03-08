@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["print_error","Just prints an `Error`'s `description` to the terminal."],["print_prompt","Just prints `db >` to the terminal."],["read_input","This function flushes the stdout, so that no outputs to the terminal get's stuck. Then it reads a line from stdin and returns it as a `String`."]]});
