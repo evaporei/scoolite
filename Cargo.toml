@@ -5,3 +5,8 @@ authors = ["Otávio Pace <otaviopp8@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+
+[dev-dependencies.cargo-husky]
+version = "1"
+default-features = false
+features = ["user-hooks"]
