@@ -1,6 +1,6 @@
 extern crate scoolite;
 
-use scoolite::{print_error, print_prompt, read_input, Command};
+use scoolite::{build_command, print_error, print_prompt, read_input};
 
 fn main() {
     loop {
@@ -8,7 +8,7 @@ fn main() {
 
         let input = read_input();
 
-        let command_result = Command::from_str(&input.trim());
+        let command_result = build_command(input);
 
         match command_result {
             Ok(command) => command.execute(),
