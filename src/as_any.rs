@@ -1,8 +1,12 @@
 use std::any::Any;
 
-/// This trait unfortunally is necessary because of casting between
+/// This trait has the purpose of casting between
 /// trait objects and Sized structures/enums.
-/// Example:
+///
+/// It is necessary unfortunally because of the Command
+/// trait and it's enums that implement it.
+///
+/// Here's an example:
 /// ```
 /// use scoolite::AsAny;
 /// use std::any::Any;

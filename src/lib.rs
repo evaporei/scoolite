@@ -1,3 +1,4 @@
+/// Module for `AsAny` trait
 mod as_any;
 mod command;
 mod error;
