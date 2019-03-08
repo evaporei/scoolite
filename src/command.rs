@@ -1,6 +1,7 @@
+use std::any::Any;
 use std::process;
 
-use super::Error;
+use super::{AsAny, Error};
 
 pub fn build_command(input: String) -> Result<Box<Command>, Error> {
     if input.chars().next() == Some('.') {
@@ -15,7 +16,7 @@ fn build_not_implemented_error(input: &str) -> Error {
     Error::new(&message)
 }
 
-pub trait Command {
+pub trait Command: AsAny {
     fn execute(&self);
 }
 
@@ -41,6 +42,12 @@ impl Command for MetaCommand {
     }
 }
 
+impl AsAny for MetaCommand {
+    fn as_any(&self) -> &Any {
+        self
+    }
+}
+
 #[derive(Debug, PartialEq)]
 enum Statement {
     Insert,
@@ -63,5 +70,40 @@ impl Command for Statement {
             Statement::Insert => println!("insert statement executed"),
             Statement::Select => println!("select statement executed"),
         }
+    }
+}
+
+impl AsAny for Statement {
+    fn as_any(&self) -> &Any {
+        self
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::{build_command, MetaCommand, Statement};
+
+    #[test]
+    fn build_command_meta_command() {
+        let input = ".exit".to_string();
+
+        let command = build_command(input).unwrap();
+
+        // stupid necessary casting, because command is a Command trait object
+        let command = command.as_any().downcast_ref::<MetaCommand>().unwrap();
+
+        assert_eq!(*command, MetaCommand::Exit);
+    }
+
+    #[test]
+    fn build_command_statement() {
+        let input = "insert".to_string();
+
+        let command = build_command(input).unwrap();
+
+        // stupid necessary casting, because command is a Command trait object
+        let command = command.as_any().downcast_ref::<Statement>().unwrap();
+
+        assert_eq!(*command, Statement::Insert);
     }
 }
