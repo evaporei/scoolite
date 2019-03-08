@@ -6,6 +6,8 @@ mod command;
 
 /// Module for `Error` type
 mod error;
+
+/// Module for interacting with stdio and stdout
 mod io;
 
 pub use as_any::*;
