@@ -6,7 +6,7 @@ use super::{AsAny, Error};
 /// This function is just a proxy that creates a `Command` or returns an `Error`.
 /// The way it decides if it will return a `MetaCommand` or a `Statement` is
 /// by looking on the `String` `input` if it starts with a dot (`.`).
-pub fn build_command(input: String) -> Result<Box<Command>, Error> {
+pub fn build_command(input: &str) -> Result<Box<Command>, Error> {
     if input.chars().next() == Some('.') {
         MetaCommand::from_str(&input.trim())
     } else {
@@ -23,7 +23,7 @@ fn build_not_implemented_error(input: &str) -> Error {
 /// The interface that every `Command` asks for is just an `execute` method, which
 /// executes the specific logic for the `Command`.
 pub trait Command: AsAny {
-    fn execute(&self);
+    fn execute(&self) -> Result<(), Error>;
 }
 
 /// `MetaCommand` is the `enum` that contains all meta commands for `scoolite`.
@@ -49,7 +49,7 @@ impl MetaCommand {
 
 impl Command for MetaCommand {
     /// Executes an different logic for each variant of the `enum`.
-    fn execute(&self) {
+    fn execute(&self) -> Result<(), Error> {
         match *self {
             MetaCommand::Exit => process::exit(0),
         }
@@ -67,7 +67,7 @@ impl AsAny for MetaCommand {
 /// and it is used to add a row to a table.
 #[derive(Debug, PartialEq)]
 enum Statement {
-    Insert,
+    Insert(String),
     Select,
 }
 
@@ -77,20 +77,30 @@ impl Statement {
     ///
     /// All of the possibilities are just the variants on the `enum`.
     fn from_str(input: &str) -> Result<Box<Command>, Error> {
-        match input {
-            "insert" => Ok(Box::new(Statement::Insert)),
-            "select" => Ok(Box::new(Statement::Select)),
-            _ => Err(build_not_implemented_error(input)),
+        let input = input.to_string();
+
+        if input.starts_with("insert") {
+            Ok(Box::new(Statement::Insert(input)))
+        } else if input.starts_with("select") {
+            Ok(Box::new(Statement::Select))
+        } else {
+            Err(build_not_implemented_error(&input))
         }
     }
 }
 
 impl Command for Statement {
     /// Executes an different logic for each variant of the `enum`.
-    fn execute(&self) {
-        match *self {
-            Statement::Insert => println!("insert statement executed"),
-            Statement::Select => println!("select statement executed"),
+    fn execute(&self) -> Result<(), Error> {
+        match self {
+            Statement::Insert(input) => {
+                println!("insert statement executed {}", input);
+                Ok(())
+            }
+            Statement::Select => {
+                println!("select statement executed");
+                Ok(())
+            }
         }
     }
 }
@@ -109,7 +119,7 @@ mod test {
     fn build_command_meta_command() {
         let input = ".exit".to_string();
 
-        let command = build_command(input).unwrap();
+        let command = build_command(&input).unwrap();
 
         // stupid necessary casting, because command is a Command trait object
         let command = command.as_any().downcast_ref::<MetaCommand>().unwrap();
@@ -119,13 +129,13 @@ mod test {
 
     #[test]
     fn build_command_statement() {
-        let input = "insert".to_string();
+        let input = "insert a b c".to_string();
 
-        let command = build_command(input).unwrap();
+        let command = build_command(&input).unwrap();
 
         // stupid necessary casting, because command is a Command trait object
         let command = command.as_any().downcast_ref::<Statement>().unwrap();
 
-        assert_eq!(*command, Statement::Insert);
+        assert_eq!(*command, Statement::Insert(input));
     }
 }
