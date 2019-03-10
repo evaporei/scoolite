@@ -1,7 +1,7 @@
 use std::any::Any;
 use std::process;
 
-use super::{AsAny, Error};
+use super::{AsAny, Error, Row, Table};
 
 /// This function is just a proxy that creates a `Command` or returns an `Error`.
 /// The way it decides if it will return a `MetaCommand` or a `Statement` is
@@ -23,7 +23,7 @@ fn build_not_implemented_error(input: &str) -> Error {
 /// The interface that every `Command` asks for is just an `execute` method, which
 /// executes the specific logic for the `Command`.
 pub trait Command: AsAny {
-    fn execute(&self) -> Result<(), Error>;
+    fn execute(&self, table: &mut Table) -> Result<(), Error>;
 }
 
 /// `MetaCommand` is the `enum` that contains all meta commands for `scoolite`.
@@ -49,7 +49,7 @@ impl MetaCommand {
 
 impl Command for MetaCommand {
     /// Executes an different logic for each variant of the `enum`.
-    fn execute(&self) -> Result<(), Error> {
+    fn execute(&self, _table: &mut Table) -> Result<(), Error> {
         match *self {
             MetaCommand::Exit => process::exit(0),
         }
@@ -89,19 +89,47 @@ impl Statement {
     }
 }
 
+impl Statement {
+    /// Creates a new `Row` based of an `input` `&str` and inserts it
+    /// inside of a `table`.
+    /// This is what get's called when something like
+    /// `Statement::Insert("insert 1 john john@mailbox.com").execute()` happens.
+    fn insert(&self, input: &str, table: &mut Table) -> Result<(), Error> {
+        let row = Row::from_str(&input)?;
+
+        table.add_row(row);
+
+        Ok(())
+    }
+
+    /// Prints all `Row`s inside of a table.
+    /// This is what get's called when something like
+    /// `Statement::Select.execute()` happens.
+    fn select(&self, table: &Table) -> Result<(), Error> {
+        let rows = table.list_rows();
+
+        for row in rows {
+            println!("{}", row);
+        }
+
+        Ok(())
+    }
+}
+
 impl Command for Statement {
     /// Executes an different logic for each variant of the `enum`.
-    fn execute(&self) -> Result<(), Error> {
-        match self {
-            Statement::Insert(input) => {
-                println!("insert statement executed {}", input);
-                Ok(())
-            }
-            Statement::Select => {
-                println!("select statement executed");
-                Ok(())
-            }
+    /// If it succeeds, it will print `Executed.\n` to the stdout.
+    fn execute(&self, table: &mut Table) -> Result<(), Error> {
+        let result = match self {
+            Statement::Insert(input) => self.insert(&input, table),
+            Statement::Select => self.select(table),
+        };
+
+        if result.is_ok() {
+            println!("Executed.");
         }
+
+        result
     }
 }
 

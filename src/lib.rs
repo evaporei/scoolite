@@ -10,7 +10,15 @@ mod error;
 /// Module for interacting with stdio and stdout
 mod io;
 
+/// Module for `Table` type
+mod table;
+
+/// Module for `Row` type
+mod row;
+
 pub use as_any::*;
 pub use command::*;
 pub use error::*;
 pub use io::*;
+pub use row::*;
+pub use table::*;
