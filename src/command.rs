@@ -16,8 +16,8 @@ pub fn build_command(input: &str) -> Result<Box<Command>, Error> {
 
 /// Creates an `Error` with the default `"not implemented"` message.
 fn build_not_implemented_error(input: &str) -> Error {
-    let message = format!("Command '{}' does not exist nor is implemented", input);
-    Error::new(&message)
+    let message = format!("Unrecognized keyword at start of '{}'", input);
+    Error::UnrecognizedStatement(message)
 }
 
 /// The interface that every `Command` asks for is just an `execute` method, which

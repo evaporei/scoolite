@@ -21,15 +21,21 @@ impl Row {
             id: data
                 .get(0)
                 .and_then(|id_string| id_string.parse::<usize>().ok())
-                .ok_or(Error::new("Failed to parse 'id' of input"))?,
+                .ok_or(Error::SyntaxError(
+                    "Syntax error. Failed to parse 'id' of input".to_string(),
+                ))?,
             username: data
                 .get(1)
                 .map(|a| a.to_string())
-                .ok_or(Error::new("Failed to parse 'username' of input"))?,
+                .ok_or(Error::SyntaxError(
+                    "Syntax error. Failed to parse 'username' of input".to_string(),
+                ))?,
             email: data
                 .get(2)
                 .map(|a| a.to_string())
-                .ok_or(Error::new("Failed to parse 'email' of input"))?,
+                .ok_or(Error::SyntaxError(
+                    "Syntax error. Failed to parse 'email' of input".to_string(),
+                ))?,
         })
     }
 }
