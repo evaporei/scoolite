@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Row","This struct contains the first table available for storage. It will be defined by the user eventually."]]});
