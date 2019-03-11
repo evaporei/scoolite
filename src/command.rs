@@ -87,9 +87,7 @@ impl Statement {
             Err(build_not_implemented_error(&input))
         }
     }
-}
 
-impl Statement {
     /// Creates a new `Row` based of an `input` `&str` and inserts it
     /// inside of a `table`.
     /// This is what get's called when something like
