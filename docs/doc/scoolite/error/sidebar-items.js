@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["Error","Main `Error` `struct`, it holds any `message` as `String`."]]});
+initSidebarItems({"enum":[["Error","Main `Error` type, each `enum` variant represents a different error."]]});

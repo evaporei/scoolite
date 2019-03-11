@@ -1,7 +1,7 @@
 use std::error;
 use std::fmt;
 
-/// Main `Error` `struct`, it holds any `message` as `String`.
+/// Main `Error` type, each `enum` variant represents a different error.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Error {
     UnrecognizedStatement(String),

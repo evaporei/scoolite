@@ -1,1 +1,1 @@
-{"rustc":11779505878581416876,"features":"[]","target":1646528568420560086,"profile":6357623724546825015,"path":10872709659218687626,"deps":[],"local":[{"Precalculated":"1552272890.014038057s (/home/otaviopace/scoolite/src/command.rs)"}],"rustflags":[],"edition":"Edition2018"}
+{"rustc":11779505878581416876,"features":"[]","target":1646528568420560086,"profile":6357623724546825015,"path":10872709659218687626,"deps":[],"local":[{"Precalculated":"1552273063.471511368s (/home/otaviopace/scoolite/src/error.rs)"}],"rustflags":[],"edition":"Edition2018"}

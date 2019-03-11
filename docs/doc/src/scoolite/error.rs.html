@@ -37,7 +37,7 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 
-<span class="doccomment">/// Main `Error` `struct`, it holds any `message` as `String`.</span>
+<span class="doccomment">/// Main `Error` type, each `enum` variant represents a different error.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Error</span> {
     <span class="ident">UnrecognizedStatement</span>(<span class="ident">String</span>),
