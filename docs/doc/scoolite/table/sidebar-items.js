@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Table","In memory storage of `Row`s."]]});
