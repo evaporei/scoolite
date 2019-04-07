@@ -7,7 +7,7 @@ mod command;
 /// Module for `Error` type
 mod error;
 
-/// Module for interacting with stdio and stdout
+/// Module for interacting with stdin and stdout
 mod io;
 
 /// Module for `Table` type
