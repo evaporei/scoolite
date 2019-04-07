@@ -21,6 +21,6 @@ pub fn read_input() -> String {
 }
 
 /// Just prints an `Error`'s `description` to the terminal.
-pub fn print_error(error: &error::Error) {
+pub fn print_error<E: error::Error>(error: E) {
     println!("{}", error.description());
 }

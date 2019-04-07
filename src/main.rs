@@ -14,7 +14,7 @@ fn main() {
         let command_result = build_command(&input);
 
         if let Err(error) = try_execute_command(command_result, &mut table) {
-            print_error(&error);
+            print_error(error);
         }
     }
 }
