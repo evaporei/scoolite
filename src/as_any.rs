@@ -8,7 +8,7 @@ use std::any::Any;
 ///
 /// Here's an example:
 /// ```
-/// use scoolite::AsAny;
+/// use scoolite::as_any::AsAny;
 /// use std::any::Any;
 ///
 /// trait A: AsAny {

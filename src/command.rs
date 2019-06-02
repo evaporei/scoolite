@@ -1,7 +1,10 @@
 use std::any::Any;
 use std::process;
 
-use super::{AsAny, Error, Row, Table};
+use crate::as_any::AsAny;
+use crate::error::Error;
+use crate::row::Row;
+use crate::table::Table;
 
 /// This function is just a proxy that creates a `Command` or returns an `Error`.
 /// The way it decides if it will return a `MetaCommand` or a `Statement` is
@@ -139,7 +142,7 @@ impl AsAny for Statement {
 
 #[cfg(test)]
 mod test {
-    use super::{build_command, MetaCommand, Statement};
+    use crate::command::{build_command, MetaCommand, Statement};
 
     #[test]
     fn build_command_meta_command() {

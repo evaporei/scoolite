@@ -1,24 +1,17 @@
 /// Module for `AsAny` trait
-mod as_any;
+pub mod as_any;
 
 /// Module for `Command`s/`Statement`s of the SQL-like language
-mod command;
+pub mod command;
 
 /// Module for `Error` type
-mod error;
+pub mod error;
 
 /// Module for interacting with stdin and stdout
-mod io;
+pub mod io;
 
 /// Module for `Table` type
-mod table;
+pub mod table;
 
 /// Module for `Row` type
-mod row;
-
-pub use as_any::*;
-pub use command::*;
-pub use error::*;
-pub use io::*;
-pub use row::*;
-pub use table::*;
+pub mod row;

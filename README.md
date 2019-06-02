@@ -7,4 +7,4 @@ But we care about life quality, so instead of C and null references, we are usin
 
 https://otaviopace.github.io/scoolite/doc/scoolite
 
-These docs are generated with this command `cargo doc --document-private-items --target-dir docs`.
+These docs are generated with this command `cargo doc --target-dir docs`.

@@ -1,6 +1,9 @@
 extern crate scoolite;
 
-use scoolite::{build_command, print_error, print_prompt, read_input, Command, Error, Table};
+use scoolite::command::{build_command, Command};
+use scoolite::error::Error;
+use scoolite::io::{print_error, print_prompt, read_input};
+use scoolite::table::Table;
 
 /// scoolite REPL implementation.
 fn main() {

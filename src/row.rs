@@ -1,4 +1,4 @@
-use super::Error;
+use crate::error::Error;
 use std::fmt;
 
 /// This struct contains the first table

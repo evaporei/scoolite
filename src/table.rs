@@ -1,4 +1,4 @@
-use super::Row;
+use crate::row::Row;
 
 /// In memory storage of `Row`s.
 pub struct Table {
