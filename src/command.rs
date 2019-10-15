@@ -143,6 +143,7 @@ impl AsAny for Statement {
 #[cfg(test)]
 mod test {
     use crate::command::{build_command, MetaCommand, Statement};
+    use crate::error::Error;
 
     #[test]
     fn build_command_meta_command() {
@@ -166,5 +167,48 @@ mod test {
         let command = command.as_any().downcast_ref::<Statement>().unwrap();
 
         assert_eq!(*command, Statement::Insert(input));
+    }
+
+    #[test]
+    fn statement_from_str_insert() {
+        let input = "insert a b c";
+
+        let insert_statement = Statement::from_str(input).unwrap();
+
+        let insert_statement = insert_statement
+            .as_any()
+            .downcast_ref::<Statement>()
+            .unwrap();
+
+        assert_eq!(*insert_statement, Statement::Insert(input.to_string()));
+    }
+
+    #[test]
+    fn statement_from_str_select() {
+        let input = "select";
+
+        let select_statement = Statement::from_str(input).unwrap();
+
+        let select_statement = select_statement
+            .as_any()
+            .downcast_ref::<Statement>()
+            .unwrap();
+
+        assert_eq!(*select_statement, Statement::Select);
+    }
+
+    #[test]
+    fn statement_from_str_not_implemented_error() {
+        let input = "unexistent statement";
+
+        let unimplemented_error = Statement::from_str(input).err().unwrap();
+
+        let expected_error_message =
+            "Unrecognized keyword at start of \'unexistent statement\'".to_string();
+
+        assert_eq!(
+            unimplemented_error,
+            Error::UnrecognizedStatement(expected_error_message)
+        );
     }
 }
