@@ -9,7 +9,7 @@ use crate::table::Table;
 /// This function is just a proxy that creates a `Command` or returns an `Error`.
 /// The way it decides if it will return a `MetaCommand` or a `Statement` is
 /// by looking on the `String` `input` if it starts with a dot (`.`).
-pub fn build_command(input: &str) -> Result<Box<Command>, Error> {
+pub fn build_command(input: &str) -> Result<Box<dyn Command>, Error> {
     if input.chars().next() == Some('.') {
         MetaCommand::from_str(&input.trim())
     } else {
@@ -42,7 +42,7 @@ impl MetaCommand {
     /// it fails it returns a `"not implemented error"` `Error`.
     ///
     /// All of the possibilities are just the variants on the `enum`.
-    fn from_str(input: &str) -> Result<Box<Command>, Error> {
+    fn from_str(input: &str) -> Result<Box<dyn Command>, Error> {
         match input {
             ".exit" => Ok(Box::new(MetaCommand::Exit)),
             _ => Err(build_not_implemented_error(input)),
@@ -60,7 +60,7 @@ impl Command for MetaCommand {
 }
 
 impl AsAny for MetaCommand {
-    fn as_any(&self) -> &Any {
+    fn as_any(&self) -> &dyn Any {
         self
     }
 }
@@ -79,7 +79,7 @@ impl Statement {
     /// it fails it returns a `"not implemented error"` `Error`.
     ///
     /// All of the possibilities are just the variants on the `enum`.
-    fn from_str(input: &str) -> Result<Box<Command>, Error> {
+    fn from_str(input: &str) -> Result<Box<dyn Command>, Error> {
         let input = input.to_string();
 
         if input.starts_with("insert") {
@@ -135,7 +135,7 @@ impl Command for Statement {
 }
 
 impl AsAny for Statement {
-    fn as_any(&self) -> &Any {
+    fn as_any(&self) -> &dyn Any {
         self
     }
 }

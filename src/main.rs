@@ -1,5 +1,3 @@
-extern crate scoolite;
-
 use scoolite::command::{build_command, Command};
 use scoolite::error::Error;
 use scoolite::io::{print_error, print_prompt, read_input};
@@ -23,7 +21,7 @@ fn main() {
 }
 
 fn try_execute_command(
-    command_result: Result<Box<Command>, Error>,
+    command_result: Result<Box<dyn Command>, Error>,
     table: &mut Table,
 ) -> Result<(), Error> {
     command_result?.execute(table)

@@ -24,7 +24,7 @@ use std::any::Any;
 /// }
 ///
 /// impl AsAny for B {
-///     fn as_any(&self) -> &Any {
+///     fn as_any(&self) -> &dyn Any {
 ///         self
 ///     }
 /// }
@@ -38,5 +38,5 @@ use std::any::Any;
 /// let b = a.as_any().downcast_ref::<B>().unwrap();// works! :tada:
 /// ```
 pub trait AsAny {
-    fn as_any(&self) -> &Any;
+    fn as_any(&self) -> &dyn Any;
 }
