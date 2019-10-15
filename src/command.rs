@@ -9,12 +9,27 @@ use crate::table::Table;
 /// This function is just a proxy that creates a `Command` or returns an `Error`.
 /// The way it decides if it will return a `MetaCommand` or a `Statement` is
 /// by looking on the `String` `input` if it starts with a dot (`.`).
-pub fn build_command(input: &str) -> Result<Box<dyn Command>, Error> {
+fn build_command(input: &str) -> Result<Box<dyn Command>, Error> {
     if input.chars().next() == Some('.') {
         MetaCommand::from_str(&input.trim())
     } else {
         Statement::from_str(&input.trim())
     }
+}
+
+/// Receives a table and a string, and tries to build the
+/// command and execute it right away
+pub fn run_command(table: &mut Table, command: String) -> Result<String, Error> {
+    let command_result = build_command(&command);
+
+    try_execute_command(command_result, table)
+}
+
+fn try_execute_command(
+    command_result: Result<Box<dyn Command>, Error>,
+    table: &mut Table,
+) -> Result<String, Error> {
+    command_result?.execute(table)
 }
 
 /// Creates an `Error` with the default `"not implemented"` message.
@@ -26,7 +41,7 @@ fn build_not_implemented_error(input: &str) -> Error {
 /// The interface that every `Command` asks for is just an `execute` method, which
 /// executes the specific logic for the `Command`.
 pub trait Command: AsAny {
-    fn execute(&self, table: &mut Table) -> Result<(), Error>;
+    fn execute(&self, table: &mut Table) -> Result<String, Error>;
 }
 
 /// `MetaCommand` is the `enum` that contains all meta commands for `scoolite`.
@@ -52,7 +67,7 @@ impl MetaCommand {
 
 impl Command for MetaCommand {
     /// Executes an different logic for each variant of the `enum`.
-    fn execute(&self, _table: &mut Table) -> Result<(), Error> {
+    fn execute(&self, _table: &mut Table) -> Result<String, Error> {
         match *self {
             MetaCommand::Exit => process::exit(0),
         }
@@ -95,39 +110,36 @@ impl Statement {
     /// inside of a `table`.
     /// This is what get's called when something like
     /// `Statement::Insert("insert 1 john john@mailbox.com").execute()` happens.
-    fn insert(&self, input: &str, table: &mut Table) -> Result<(), Error> {
+    fn insert(&self, input: &str, table: &mut Table) -> Result<String, Error> {
         let row = Row::from_str(&input)?;
 
         table.add_row(row);
 
-        Ok(())
+        Ok("".to_string())
     }
 
-    /// Prints all `Row`s inside of a table.
+    /// Returns all `Row`s inside of a table as String.
     /// This is what get's called when something like
     /// `Statement::Select.execute()` happens.
-    fn select(&self, table: &Table) -> Result<(), Error> {
+    fn select(&self, table: &Table) -> Result<String, Error> {
         let rows = table.list_rows();
 
-        for row in rows {
-            println!("{}", row);
-        }
-
-        Ok(())
+        Ok(rows.iter().map(|r| format!("{}\n", r)).collect())
     }
 }
 
 impl Command for Statement {
     /// Executes an different logic for each variant of the `enum`.
-    /// If it succeeds, it will print `Executed.\n` to the stdout.
-    fn execute(&self, table: &mut Table) -> Result<(), Error> {
+    /// If it succeeds, it will return the String of the command executed
+    /// concatenated with `Executed.\n`.
+    fn execute(&self, table: &mut Table) -> Result<String, Error> {
         let result = match self {
             Statement::Insert(input) => self.insert(&input, table),
             Statement::Select => self.select(table),
         };
 
         if result.is_ok() {
-            println!("Executed.");
+            return result.map(|s| format!("{}Executed.\n", s));
         }
 
         result
