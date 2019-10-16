@@ -154,8 +154,9 @@ impl AsAny for Statement {
 
 #[cfg(test)]
 mod test {
-    use crate::command::{build_command, MetaCommand, Statement};
+    use crate::command::{build_command, run_command, MetaCommand, Statement};
     use crate::error::Error;
+    use crate::table::Table;
 
     #[test]
     fn build_command_meta_command() {
@@ -221,6 +222,55 @@ mod test {
         assert_eq!(
             unimplemented_error,
             Error::UnrecognizedStatement(expected_error_message)
+        );
+    }
+
+    #[test]
+    fn run_command_insert_with_select_success() {
+        let mut table = Table::new();
+
+        let output = run_command(
+            &mut table,
+            "insert 1 otaviopace otavio@gmail.com".to_string(),
+        )
+        .unwrap();
+
+        assert_eq!(output, "Executed.\n");
+
+        let output = run_command(&mut table, "select".to_string()).unwrap();
+
+        assert_eq!(output, "(1, otaviopace, otavio@gmail.com)\nExecuted.\n");
+    }
+
+    #[test]
+    fn run_command_insert_syntax_error() {
+        let mut table = Table::new();
+
+        let error = run_command(
+            &mut table,
+            "insert text_id otaviopace otavio@gmail.com".to_string(),
+        )
+        .unwrap_err();
+
+        assert_eq!(
+            error,
+            Error::SyntaxError("Syntax error. Failed to parse 'id' of input".to_string())
+        );
+    }
+
+    #[test]
+    fn run_command_insert_negative_id() {
+        let mut table = Table::new();
+
+        let error = run_command(
+            &mut table,
+            "insert -1 otaviopace otavio@gmail.com".to_string(),
+        )
+        .unwrap_err();
+
+        assert_eq!(
+            error,
+            Error::SyntaxError("Syntax error. Failed to parse 'id' of input".to_string())
         );
     }
 }
